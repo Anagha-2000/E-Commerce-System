@@ -1,0 +1,638 @@
+d1=[]
+cart=[]
+from openpyxl import load_workbook
+import openpyxl
+def signup():
+from openpyxl import load_workbook
+import openpyxl
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\customer_details.xlsx")
+sheet=wb.worksheets[0]
+val=sheet.cell(row=1,column=20).value
+d2={}
+name=""
+name1=input("ENTER YOUR FIRST NAME:\t")
+name2=input("ENTER YOUR LAST NAME:\t")
+name=name1.capitalize()+" "+name2.capitalize()
+d2[1]=10000001+int(val)
+d2[2]=name
+dob=input("ENTER DATE OF BIRTH(dd/mm/yyyy):\t")
+d2[9]=dob
+while True:
+try:
+mob=int(input("ENTER MOBILE NUMBER:\t"))
+except ValueError:
+printf("WRONG INPUT !!...ENTER AGAIN")
+else:
+break
+d2[3]=mob
+g=input("ENTER GENDER\nM-->MALE\nF-->FEMALE\n")
+d2[10]=g
+d2[7]=0
+d2[8]=0
+em=input("ENTER E-MAIL ID\t:")
+d2[4]=em
+flag_u=1
+while flag_u==1:
+user_name=input("ENTER A USER NAME FOR FUTURE LOGIN:\t")
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\customer_details.xlsx")
+sheet=wb['Sheet1']
+for value in sheet.iter_cols(min_col=5,max_col=5,values_only=True):
+if user_name not in value:
+flag_u=0
+break
+else:
+print("THE ENTERED USER NAME ALREADY EXISTS IN OUR DATABASE...PLEASE ENTER THE USER NAME AGAIN...")
+d2[5]=user_name
+while True:
+passcode=input("ENTER PASSCODE(min 8 characters):\t")
+if(len(passcode)<8):
+print("INVALID INPUT...PASSCODE SHOULD CONTAIN MINIMUM 8 CHARACTERS")
+continue
+else:
+break
+d2[6]=passcode
+d2[11]=0
+sheet.cell(row=1,column=20).value=str(int(val)+1)
+for i in range(1,12):
+sheet.cell(row=int(val)+2,column=i).value=d2.get(i)
+wb.save("C:\\Users\\chaitra\\Desktop\\customer_details.xlsx")
+global d1
+for i in range(2,int(sheet.cell(row=1,column=20).value)+2):
+if(user_name==sheet.cell(row=i,column=5).value):
+for element in range(1,12):
+d1.append(sheet.cell(row=i,column=element).value)
+def find(user_name,passw):
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\customer_details.xlsx")
+sheet=wb['Sheet1']
+global d1
+for i in range(2,int(sheet.cell(row=1,column=20).value)+2):
+if(user_name==sheet.cell(row=i,column=5).value):
+for element in range(1,12):
+d1.append(sheet.cell(row=i,column=element).value)
+for value in sheet.iter_cols(min_col=5,max_col=5,values_only=True):
+if user_name in value:
+lfv1=value.index(user_name)
+else:
+return 0
+for value1 in sheet.iter_cols(min_col=6,max_col=6,values_only=True):
+if passw in value1:
+lfv2=value1.index(passw)
+else:
+return 0
+if(lfv1==lfv2):
+return 1
+else:
+return 0
+def login():
+while True:
+try:
+choice1=int(input("ENTER THE CHOICE\n1-->LOGIN\n2-->SIGNUP\n"))
+except:
+print("\nINVALID INPUT...PLEASE TRY AGAIN")
+else:
+break
+while(choice1==1):
+user_name=input("ENTER YOUR USERNAME:\t")
+passw=input("ENTER YOUR PASSCODE:\t")
+r1=find(user_name,passw)
+if(r1==1):
+print("\nLOGIN SUCCESSFUL !!...")
+choice1=0
+while(r1!=1):
+print("\nINVALID USERNAME AND PASSCODE...PLEASE TRY AGAIN...\n")
+break
+if(choice1==2):
+signup()
+login()
+print(d1)
+def twilio(n,o):
+from twilio.rest import Client
+main_b="YOUR OTP IS : "+str(o)+". THIS OTP IS VALID ONLY FOR 100 SECONDS"
+account_sid = 'AC7b0e6e37743976a12d90f73daeef1371'
+auth_token = '8b1640a6cdadf4cb042f9061eb262983'
+client = Client(account_sid, auth_token)
+message = client.messages .create(
+body=main_b,
+from_='+18122704351',
+to='+91'+str(n)
+)
+def feedback(d1):
+from openpyxl import load_workbook
+import openpyxl
+fl,sv_id,c=0,[],6
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+sheet=wb.worksheets[0]
+t_id=int(input("ENTER TRANSCATION ID SENT TO THE REGISTERED E-MAIL\n"))
+cell_val=sheet.cell(row=1,column=40).value
+while(fl!=1):
+for el in range(2,int(cell_val)+2):
+if(sheet.cell(row=el,column=1).value==t_id and sheet.cell(row=el,column=2).value==d1[0]):
+for j in range(sheet.cell(row=el,column=3).value):
+print("\nNO. {0}\nPRODUCT ID = {1}\nPRODUCT NAME = {2}".format(j+1,sheet.cell(row=el,column=c).value,sheet.cell(row=el,column=c+1).value))
+sv_id.append(sheet.cell(row=el,column=c).value)
+c+=4
+fl=1
+break
+if(fl!=1):
+t_id=int(input("INVALID...ENTER AGAIN...OR ENTER 0 TO EXIT\n"))
+if(t_id==0):
+return
+p_inp=int(input("ENTER PRODUCT NUMBER\n"))
+a=""
+while True:
+try:
+num=int(input("ENTER YOUR RATING OUT OF FIVE\n"))
+except ValueError :
+print("WRONG INPUT !!!..\nPLEASE ENTER A NUMERIC VALUE OUT OF 5 ")
+else:
+break
+title=input("ENTER REVIEW TITLE:\n")
+det=input("ADD DETAILS...\n")
+print("TAHNKYOU FOR YOUR FEEDBACK..YOUR INPUT HAS BEEN SAVED..")
+a="\n\nName : "+d1[1].capitalize()+"\n"+"Star rating : "+"*"*num+"\n"+title.upper()+"\n" +det+"\n"
+str2="C:\\Users\\chaitra\\Desktop\\product_details\\"
+id2=".txt"
+fo2=open(str2+"R"+str(sv_id[p_inp-1])+id2,"a")
+fo2.write(a)
+fo2.close()
+from openpyxl import load_workbook
+import openpyxl
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\products_details.xlsx")
+sheet=wb.worksheets[0]
+c_val=sheet.cell(row=1,column=19).value
+for i in range(2,int(c_val)+2):
+if(sheet.cell(row=i,column=1).value==sv_id[p_inp-1]):
+#print("found")
+avg=float(sheet.cell(row=i,column=5).value)
+tot_n=int(sheet.cell(row=i,column=12).value)
+sheet.cell(row=i,column=5).value=round(((avg*tot_n)+num)/(tot_n+1),2)
+sheet.cell(row=i,column=12).value=tot_n+1
+wb.save("C:\\Users\\chaitra\\Desktop\\products_details.xlsx")
+def check_valid_c(t_id,lim,ch):
+from openpyxl import load_workbook
+import openpyxl
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+sheet=wb.worksheets[0]
+for m in range(2,lim+2):
+if(type(sheet.cell(row=m,column=1).value)==type(" ")):
+if(sheet.cell(row=m,column=1).value=="N"+str(t_id)):
+print("INVALID ACTION...THE TRANSACTION HAS ALREADY BEEN CANCELLED\nREQUEST IS DENIIED\n")
+return False
+else:
+if(sheet.cell(row=m,column=1).value)==str(ch)+"C"+str(t_id):
+print("INVALID ACTION...THE PRODUCT HAS ALREADY BEEN CANCELLED\nREQUEST IS DENIED")
+return False
+return True
+def smtp1(name,e_id,t_id,amt,r=u"\u20B9"):
+str3="AN EMAIL REGARDING CONFIRMATION IS SENT TO REGISTERED EMAIL ID "+e_id
+str1="YOUR REQUEST FOR CANCELLATION IS ACCEPTED...REFUND OF AMOUNT "+r+" "+str(amt)+" WILL BE INITIATED WITHIN 3 WORKING DAYS...THANK YOU"
+str2="HEY "+name+"...\n"+str1
+print(str1+"\n"+str3)
+import smtplib
+server=smtplib.SMTP('smtp.gmail.com',port=587)
+server.starttls()
+server.login("shivanshpoojary92000@gmail.com","ZYX54321lkj")
+msg=str2
+#print(msg)
+server.sendmail("shivanshpoojary92000@gmail.com",e_id,msg)
+server.quit()
+def req_cancel(d1):
+from openpyxl import load_workbook
+import openpyxl
+fl,sv_id,c=0,[],6
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+sheet=wb.worksheets[0]
+t_id=int(input("ENTER TRANSCATION ID SENT TO THE REGISTERED E-MAIL\n"))
+cell_val=sheet.cell(row=1,column=40).value
+while(fl!=1):
+for el in range(2,int(cell_val)+2):
+if(sheet.cell(row=el,column=1).value==t_id and sheet.cell(row=el,column=2).value==d1[0]):
+sv_id.append(el)
+sv_id.append(sheet.cell(row=el,column=3).value)
+for j in range(sheet.cell(row=el,column=3).value):
+print("\nNO. {0}\nPRODUCT ID = {1}\nPRODUCT NAME = {2}".format(j+1,sheet.cell(row=el,column=c).value,sheet.cell(row=el,column=c+1).value))
+c+=4
+fl=1
+break
+if(fl!=1):
+t_id=int(input("INVALID...ENTER AGAIN...OR ENTER 0 TO EXIT\n"))
+if(t_id==0):
+return
+if(sv_id[1]==1):
+ch=int(input("ENTER 1 TO CONFIRM CANCELLATION OF THE ORDER\n"))
+if(ch==1 and check_valid_c(t_id,cell_val,ch)):
+sheet.cell(row=int(cell_val)+2,column=1).value="N"+str(t_id)
+sheet.cell(row=int(cell_val)+2,column=2).value=d1[0]
+sheet.cell(row=int(cell_val)+2,column=3).value=1
+for i in range(5):
+sheet.cell(row=int(cell_val)+2,column=i+4).value=sheet.cell(row=sv_id[0],column=i+4).value
+sheet.cell(row=1,column=40).value=int(cell_val)+1
+sheet.cell(row=sv_id[0],column=6+(ch-1)*4).value=str(sheet.cell(row=sv_id[0],column=6+(ch-1)*4).value)+"(CANCELLED)"
+wb.save("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+smtp1(d1[1],d1[3],"N"+str(t_id),sheet.cell(row=int(cell_val)+2,column=4).value)
+else:
+pass
+#call back
+else:
+ch=int(input("ENTER PRODUCT NUMBER TO CANCEL THE PRODUCT OR ENTER 0 TO CANCEL ENTIRE TRANSACTION\n"))
+if(check_valid_c(t_id,cell_val,ch)):
+if(ch==0):
+cell_count=1
+while(sheet.cell(row=sv_id[0],column=cell_count).value):
+cell_count+=1
+for i in range(1,cell_count+1):
+if(i==3):
+continue
+sheet.cell(row=int(cell_val)+2,column=i+1).value=sheet.cell(row=sv_id[0],column=i+1).value
+sheet.cell(row=int(cell_val)+2,column=1).value="N"+str(t_id)
+cell_count=6
+for i in range(sheet.cell(row=sv_id[0],column=3).value):
+sheet.cell(row=sv_id[0],column=cell_count).value=str(sheet.cell(row=sv_id[0],column=cell_count).value)+"(CANCELLED)"
+cell_count+=4
+sheet.cell(row=1,column=40).value=int(cell_val)+1
+k_l=0
+for i in range(2,int(cell_val)+2):
+if(type(sheet.cell(row=i,column=1).value)==type(" ") and sheet.cell(row=i,column=2).value==d1[0]):
+in_val=sheet.cell(row=i,column=1).value.find("C")
+if(in_val!=-1):
+new_id=sheet.cell(row=i,column=1).value[in_val+1:]
+if(new_id==str(t_id)):
+k_l+=sheet.cell(row=i,column=4).value
+sheet.cell(row=int(cell_val)+2,column=4).value=sheet.cell(row=sv_id[0],column=4).value-k_l
+wb.save("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+smtp1(d1[1],d1[3],"N"+str(t_id),sheet.cell(row=int(cell_val)+2,column=4).value)
+else:
+dict1={2:2,(ch-1)*4+5:5,(ch-1)*4+6:6,(ch-1)*4+7:7,(ch-1)*4+8:8}
+for k,v in dict1.items():
+sheet.cell(row=int(cell_val)+2,column=v).value=sheet.cell(row=sv_id[0],column=k).value
+if(k==(ch-1)*4+6):
+sheet.cell(row=sv_id[0],column=k).value=str(sheet.cell(row=sv_id[0],column=k).value)+"(CANCELLED)"
+sheet.cell(row=int(cell_val)+2,column=3).value=1
+sheet.cell(row=int(cell_val)+2,column=1).value=str(ch)+"C"+str(t_id)
+sheet.cell(row=int(cell_val)+2,column=4).value=sheet.cell(row=sv_id[0],column=(ch*4)+4).value*sheet.cell(row=sv_id[0],column=(ch*4)+1).value
+sheet.cell(row=1,column=40).value=int(cell_val)+1
+wb.save("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+smtp1(d1[1],d1[3],str(ch)+"C"+str(t_id),sheet.cell(row=int(cell_val)+2,column=4).value)
+def email(e,name,id1):
+import smtplib
+from email.message import EmailMessage
+str1="HEY "+name.upper()+" !!!\nYOUR ORDER HAS BEEN PLACED\nTRANSACTION ID :"+id1+"\nTHANKYOU FOR SHOPPING :)\n"
+email=EmailMessage()
+email['from']="E COMMERCE"
+email['to']=e
+email['subject']="ORDER CONFIRMATION"
+email.set_content(str1)
+with smtplib.SMTP(host="smtp.gmail.com",port=587) as smtp:
+smtp.ehlo()
+smtp.starttls()
+smtp.login("shivanshpoojary92000@gmail.com","ZYX54321lkj")
+smtp.send_message(email)
+def otp():
+import numpy as np
+result=''
+for i in range(6):
+a=np.random.randint(1,9,size=(1,1))
+a1=a[0,0]
+a2=str(a1)
+result=result+a2
+return result
+def bill(d1,cart):
+from openpyxl import load_workbook
+import openpyxl
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\products_details.xlsx")
+sheet=wb.worksheets[0]
+c_val=sheet.cell(row=1,column=19).value
+prod_id,prod_name,prod_price,prod_q,price,prod_save=[],[],[],[],[],[]
+total_sav,total=0,0
+dict1={}
+r=u"\u20B9"
+import pandas as pd
+from datetime import date
+from datetime import datetime
+now=datetime.now()
+c_t=now.strftime("%H:%M:%S")
+today=date.today()
+c_d=today.strftime("%B %d, %Y")
+t_id=int(d1[0])+int(cart[1][0])+int(otp())
+print("\t\t\t\t*** INVOICE ***\n")
+print("NAME : {0}\nCUSTOMER ID : {1}\nDATE : {2}\nTIME :{3}\nTRANSACTION ID :{4}\n".format(d1[1],d1[0],c_d,c_t,t_id))
+for i in range(0,len(cart),2):
+prod_q.append(cart[i])
+prod_id.append(cart[i+1][0])
+prod_price.append(cart[i+1][1])
+price.append((cart[i])*(cart[i+1][1]))
+prod_save.append((cart[i+1][5])*cart[i])
+prod_name.append(cart[i+1][6])
+total_sav+=cart[i+1][5]*cart[i]
+total+=cart[i]*cart[i+1][1]
+curr_st=0
+for i in range(0,len(cart),2):
+for j in range(2,int(c_val)+2):
+if(sheet.cell(row=j,column=1).value==cart[i+1][0]):
+sheet.cell(row=j,column=10).value-=cart[i]
+if(sheet.cell(row=j,column=10).value<=0):
+if(sheet.cell(row=j,column=10).value==0):
+print("WE ARE SORRY..CURRENTLY THE PRODUCT IS OUT OF STOCK...")
+#call back
+else:
+inp=int(input("ENTER CHOICE\n1-->LIMITED STOCK AVAILABLE...PROCEED TO BUY WITH {0} QUANTITIES\n2-->CANCEL OEDER AND GO BACK\n".format(sheet.cell(row=j,column=10).value+cart[i])))
+if(inp==2):
+sheet.cell(row=j,column=10).value+=cart[i]
+pass#call back
+sheet.cell(row=j,column=10).value=0
+wb.save("C:\\Users\\chaitra\\Desktop\\products_details.xlsx")
+dict1={'PRODUCT NAME':prod_name,'PRODUCT ID':prod_id,"PRODUCT PRICE":prod_price,"QUANTITY":prod_q,"TOTAL":price,"YOU SAVE":prod_save}
+df=pd.DataFrame(dict1)
+print(df)
+print("TOTAL AMOUNT:{0}{1}\nTOTAL SAVINGS:{2}{3}".format(r,total,r,total_sav))
+final1=int(input("ENTER 1 TO PLACE YOUR ORDER AND PROCEED TO PAY...\n"))
+if(final1==1):
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\customer_details.xlsx")
+sheet=wb.worksheets[0]
+c_val=sheet.cell(row=1,column=20).value
+for i in range(2,int(c_val)+2):
+#print(sheet.cell(row=i,column=1).value)
+if(sheet.cell(row=i,column=1).value==d1[0]):
+if(sheet.cell(row=i,column=7).value):
+s1=sheet.cell(row=i,column=7).value
+cvv=sheet.cell(row=i,column=8).value
+s1="*"*4+" "+"*"*4+" "+"*"*4+" "+str(s1)[12::]
+print("DEBIT CARD NUMBER :{}".format(s1))
+cvv2=int(input("ENTER THE CVV\t"))
+while(cvv2!=int(cvv)):
+cvv2=int(input("INVALID...ENTER THE CVV AGAIN..\t"))
+break
+else:
+s1=input("ENTER 16 DIGIT DEBIT CARD NUMBER\n")
+cvv=input("ENTER THE CVV\n")
+u_choice=int(input("SAVE YOUR DEBIT CARD DETAILS FOR FUTURE TRANSACTIONS ?\nYES-->1\nNO-->2\n"))
+if(u_choice==1):
+sheet.cell(row=i,column=7).value=s1
+sheet.cell(row=i,column=8).value=cvv
+wb.save("C:\\Users\\chaitra\\Desktop\\customer_details.xlsx")
+break
+print("ACCEPTED\nAN OTP HAS BEEN SENT TO THE REGISTERED MOBILE NUMBER : {0}".format(d1[2]))
+otp1=otp()
+twilio(d1[2],otp1)
+#print(otp1)
+import time
+otp_count=2
+t1=time.time()
+otp2=int(input("ENTER THE OTP:\t"))
+while(otp_count!=0 and otp2!=int(otp1)):
+otp2=int(input("ENTER THE OTP AGAIN:\t"))
+otp_count-=1
+t2=time.time()
+if(t2-t1>100 or otp_count==0):
+print("TRANSACTION FAILED\n")
+bill(d1,cart)
+else:
+print("OTP ACCEPTED !!..\nTRANSACTION SUCCESSFUL\n")
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+sheet=wb.worksheets[0]
+val_t=sheet.cell(row=1,column=40).value
+sheet.cell(row=int(val_t)+2,column=1).value=t_id
+sheet.cell(row=int(val_t)+2,column=2).value=d1[0]
+sheet.cell(row=int(val_t)+2,column=3).value=len(cart)/2
+sheet.cell(row=int(val_t)+2,column=4).value=total
+c1=4
+for i in range(1,len(cart)+1):
+if(i%2==1):
+sheet.cell(row=int(val_t)+2,column=i+c1).value=cart[c1-4]
+else:
+sheet.cell(row=int(val_t)+2,column=i+c1).value=cart[c1-3][0]
+c1+=1
+sheet.cell(row=int(val_t)+2,column=i+c1).value=cart[c1-4][6]
+c1+=1
+sheet.cell(row=int(val_t)+2,column=i+c1).value=cart[c1-5][1]
+sheet.cell(row=1,column=40).value=int(val_t)+1
+wb.save("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+print("PROCESSING YOUR ORDER REQUEST...\n")
+email(str(d1[3]),str(d1[1]),str(t_id))
+time.sleep(10)
+print("ORDER IS PLACED !!!..\nORDER CONFIRMATION WITH TRANSACTION ID IS SENT TO THE REGISTERED G-MAIL ID 1: {0}\nTHANKYOU FOR SHOPPING WITH US".format(d1[3]))
+#d1=[10000011,'RAJESH KOLI',8291500733,'abc@gmail.com','rajesh_k','12345678',0,0,'23/06/2000','M','4589']
+def display_sorted(new_l,r=u"\u20B9"):
+from openpyxl import load_workbook
+import openpyxl
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\products_details.xlsx")
+sheet=wb.worksheets[0]
+#print(new_l)
+for i in range(len(new_l)):
+print("{0}\n{4}{5}\nRating : {1}\nYOU SAVE :{6}{2}({3}%)\n".format(new_l[i][6],new_l[i][2],new_l[i][5],new_l[i][4],r,new_l[i][1],r))
+def filter_products(new_l):
+choice_app=int(input("SELECT THE REQUIRED FILTER\n1-->LOW TO HIGH(PRICE)\n2-->HIGH TO LOW\n3-->BASED ON RATING\n"))
+if(choice_app==1):
+new_l.sort(key=lambda x:x[1])
+#print(new_l)
+display_sorted(new_l)
+elif(choice_app==2):
+new_l.sort(key=lambda x:x[1],reverse=True)
+display_sorted(new_l)
+elif(choice_app==3):
+new_l.sort(key=lambda x:x[2],reverse=True)
+display_sorted(new_l)
+else:
+print("INVALID INPUT !!!...")
+filter_products(new_l)
+def fetch(product_id):
+global d1
+count_p,save=0,0
+list_p,list_pr,list_r,list_i,list_percent,list_save,list_n,list_rn=[],[],[],[],[],[],[],[]
+per=0.0
+r=u"\u20B9"
+from openpyxl import load_workbook
+import openpyxl
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\products_details.xlsx")
+sheet=wb.worksheets[0]
+parent_id=product_id
+val=sheet.cell(row=1,column=19).value
+for i in range(2,int(val)+1):
+if(int(sheet.cell(row=i,column=2).value)==parent_id):
+count_p+=1
+list_i.append(i)
+list_n.append("PRODUCT {0}".format(count_p))
+list_rn.append(sheet.cell(row=i,column=12).value)
+list_p.append(sheet.cell(row=i,column=1).value)
+list_pr.append(sheet.cell(row=i,column=4).value)
+list_r.append(sheet.cell(row=i,column=5).value)
+per=round((100-(sheet.cell(row=i,column=4).value/sheet.cell(row=i,column=3).value)*100),2)
+save=sheet.cell(row=i,column=3).value-sheet.cell(row=i,column=4).value
+list_percent.append(per)
+list_save.append(save)
+print("{0}\n{4}{5}\nRating : {1}\nYOU SAVE :{6}{2}({3}%)\n".format(list_n[count_p-1],sheet.cell(row=i,column=5).value,save,per,r,sheet.cell(row=i,column=4).value,r))
+new_l=list(zip(list_p,list_pr,list_r,list_i,list_percent,list_save,list_n,list_rn))
+det=int(input("ENTER 1 TO APPLY FILTERS OR 0 TO SKIP THIS STEP :\n"))
+if(det==1):
+#new_l=list(zip(list_p,list_pr,list_r,list_i,list_percent,list_save,list_n,list_rn))
+filter_products(new_l)
+det1=int(input("ENTER PRODUCT NUMBER TO GET MORE DETAILS OR O TO SKIP\t"))
+if(det1!=0):
+if(det1<=count_p):
+product_id+=det1
+str1="C:\\Users\\chaitra\\Desktop\\product_details\\"
+id1=".txt"
+fo=open(str1+str(product_id)+id1,"r")
+data=fo.read()
+print(data)
+else:
+print("INVALID INPUT")
+head_pg()
+for z in range(len(new_l)):
+if(product_id==int(new_l[z][0])):
+tup=new_l[z]
+ch=int(input("ENTER 1 TO VIEW REVIEWS...\t"))
+if(ch==1):
+print("TOTAL NUMBER OF REVIEWS={0}\nAVERAGE RATING={1}".format(tup[7],tup[2]))
+str2="C:\\Users\\chaitra\\Desktop\\product_details\\"
+id2=".txt"
+fo2=open(str2+"R"+str(product_id)+id2,"r")
+data2=fo2.read()
+print(data2)
+choice_checkout=int(input("ENTER THE CHOICE\n1-->BUY NOW\n2-->ADD TO CART\n3-->GO BACK\n"))
+for z in range(len(new_l)):
+if(product_id==int(new_l[z][0])):
+tup=new_l[z]
+if(choice_checkout==3):
+d1=[10000011]
+a,st=1,0
+wb1=load_workbook("C:\\Users\\chaitra\\Desktop\\recommendation.xlsx")
+sheet1=wb1.worksheets[0]
+while(sheet1.cell(row=1,column=a).value):
+if(sheet1.cell(row=1,column=a).value==d1[0]):
+st=a
+break
+a+=1
+if(st==0):
+sheet1.cell(row=1,column=a).value=d1[0]
+st=a
+a=2
+while(sheet1.cell(row=a,column=st).value):
+a+=1
+sheet1.cell(row=a,column=st).value=product_id
+wb1.save("C:\\Users\\chaitra\\Desktop\\recommendation.xlsx")
+head_pg()
+elif(choice_checkout==1):
+quant=int(input("ENTER THE QUANTITY:\t"))
+bill(d1,[quant,tup])
+elif(choice_checkout==2):
+quant=int(input("ENTER THE QUANTITY:\t"))
+global cart
+cart.extend([quant,tup])
+checkout_2=input("ENTER C TO CONTINUE SHOPPING OR P TO CHECKOUT...")
+if(checkout_2=="C"):
+head_pg()
+else:
+bill(d1,cart)
+else:
+print("INVALID INPUT...\n")
+head_pg()
+def check_my_rec(cust_id):
+prod_id=0
+wb=load_workbook("C:\\Users\\chaitra\\Desktop\\transaction_details.xlsx")
+sheet=wb.worksheets[0]
+u=sheet.cell(row=1,column=40).value
+for i in range(int(u),1,-1):
+if(sheet.cell(row=i,column=2).value==cust_id):
+if(type(sheet.cell(row=i,column=1).value)==type(" ")):
+continue
+else:
+prod_id=sheet.cell(row=i,column=6).value
+prod_id=(prod_id//10000)*10000
+wb1=load_workbook("C:\\Users\\chaitra\\Desktop\\recommendation.xlsx")
+sheet1=wb1.worksheets[0]
+a,b,l1,l2=1,1,[],[]
+while(sheet1.cell(row=1,column=a).value):
+if(cust_id==sheet1.cell(row=1,column=a).value):
+while(sheet1.cell(row=b+1,column=a).value):
+l1.append(sheet1.cell(row=b+1,column=a).value)
+b+=1
+a+=1
+a=1
+while(sheet1.cell(row=1,column=a).value):
+b=2
+while(sheet1.cell(row=b,column=a).value):
+l2.append(sheet1.cell(row=b,column=a).value)
+b+=1
+a+=1
+b=max(set(l2),key=l2.count)
+b=(b//10000)*10000
+if(l1):
+a=max(set(l1),key=l1.count)
+a=(a//10000)*10000
+fetch(a)
+elif(prod_id):
+fetch(prod_id)
+else:
+b=max(set(l2),key=l2.count)
+b=(b//10000)*10000
+fetch(b)
+def shop_now():
+product_id=1000000
+shop1=int(input("SELECT CATEGORY :\n\n1--> Mobiles, Computers\n2--> TV, Appliances, Electronics\n3--> Men\'s Fashion\n4--> Women\'s Fashion\n5--> Home, Kitchen, Pets, Furniture\n6--> Grocery and Household appliances\n7--> Sports, Fitness, Bags, Luggage\n8--> Toy\'s, Kid\'s Fashion\n9--> Car, Motorbike, Industrial\n10--> Books and Audible\n"))
+if(shop1==1):
+shop_sub1=int(input("SELECT SUB-CATEGORY :\n1--> Mobiles\n2--> Mobile Accessories\n3--> Power Banks\n4--> Laptops\n5--> Tablets\n6--> Computers and Accessories\n7--> Office Supplies & Stationary\n"))
+product_id+=(100000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==2):
+shop_sub1=int(input("SELECT SUB-CATEGORY :\n1-->Televisions\n2-->Washing machines\n3-->Refrigerators\n4-->Microwaves\n5-->Air Conditioners\n6-->Dishwashers\n7-->Home Entertainmentt systems"))
+product_id+=(200000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==3):
+shop_sub1=int(input("SELECT SUB-CATEGORY :\n1-->Clothing\n2-->Shoes\n3-->Watches\n4-->Bags and Wallets\n5-->Sunglasses\n6-->Sportswear\n"))
+product_id+=(300000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==4):
+shop_sub1=int(input("SELECT SUB-CATEGORY :\n1-->Clothing\n2-->Shoes\n3-->Watches\n4-->Fashion and Silver Jewellery\n5-->Gold and Diamond Jewellery\n6-->Handbags and Clutches\n7-->Sunglasses\n8-->Sportswear\n"))
+product_id+=(400000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==5):
+shop_sub1=int(input("SELECT SUB-CETEGORY :\n1-->Kitchen and Dining\n2-->Home Furnishing\n3-->Home Decor\n4-->Garden and Outdoors\n5-->Indoor Lighting\n6-->Pet Supplies\n7-->Art and Craft Supplies"))
+product_id+=(500000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==6):
+shop_sub1=int(input("SELECT SUB-CATEGORY :\n1-->Super Saver Pantry\n2-->Cooking Essentials\n3-->Snacks and Beverages\n4-->Packaged Foods\n5-->Gourmet Foods\n"))
+product_id+=(600000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==7):
+shop_sub1=int(input("SELECT SUB-CATEGORY :\n1-->Exercise and Fitness\n2-->Cycling\n3-->Badminton\n4-->Cricket\n5-->Football\n6-->Other games\n7-->Backpacks\n8-->Travel Luggage"))
+product_id+=(700000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==8):
+shop_sub1=int(input("ENTER SUB-CATEGORY :\n1-->All Toys and Games\n2-->Kid\'s Clothing\n3-->Kid\'s Shoes\n4-->School Bags\n"))
+product_id+=(800000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==9):
+shop_sub1=int(input("ENTER SUB-CATEGORY :\n1-->Motorbike Accessories and Parts\n2-->Car Accessories\n3-->Car and Motorbike Care\n4-->Industrial and Scientific Supplies\n5-->Lab and Scientific\n"))
+product_id+=(900000+shop_sub1*10000)
+fetch(product_id)
+elif(shop1==10):
+shop_sub1=int(input("ENTER SUB-CATEGORY :\n1-->Fiction Books\n2-->Comic books\n3-->School Textbooks\n4-->Exam Central\n5-->Textbooks\n6-->Indian Language Books\n"))
+product_id+=(1000000+shop_sub1*10000)
+fetch(product_id)
+else:
+print("INVALID INPUT !!!...")
+shop_now()
+def head_pg():
+choice_m=int(input("ENTER YOUR CHOICE...\n1-->CHECK MY RECOMMENDATIONS\n2-->SHOP NOW\n3-->REQUEST CANCELLATION\n4-->POST A REVIEW\n5-->ADD MONEY TO E-WALLET\n"))
+global d1
+if(choice_m==1):
+check_my_rec(d1[0])
+elif(choice_m==2):
+shop_now()
+elif(choice_m==3):
+req_cancel(d1)
+elif(choice_m==4):
+feedback(d1)
+elif(choice_m==5):
+e_wallet()
+else:
+print("INVALID INPUT...PLEASE TRY AGAIN...")
+head_pg()
+while True:
+try:
+head_pg()
+except ValueError:
+print("OOPS !!...SOMETHING WENT WRONG..TRY AGAIN... ")
+else:
+break
